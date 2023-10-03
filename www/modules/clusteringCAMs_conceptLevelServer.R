@@ -119,7 +119,12 @@ clusteringCAMs_conceptLevelServer <-
             tmp_CorrSigTables <- correlationTable(conList = tmp_countDuplicates,
                                   inputTable =  tmp_binaryEncoding, # metricDF
                                   CorrFUNC = cohensKappa, considerValence = TRUE,
-                                  datNodes = globals$dataCAMsummarized[[1]])
+                                  datNodes = globals$dataCAMsummarized[[1]],
+                                  if(input$drawHeatmap_setting_summarized == "Yes"){
+                                    useSummarized = TRUE}
+                                  else {
+                                    useSummarized = FALSE
+                                  })
     }else{
       tmp_CorrSigTables <- correlationTable(conList = tmp_countDuplicates,
                                   inputTable =  tmp_binaryEncoding, # metricDF

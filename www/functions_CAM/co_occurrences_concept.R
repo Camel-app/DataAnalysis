@@ -165,12 +165,18 @@ correlationTable <- function(conList = duplicateDF,
                              inputTable = binaryDf,
                              CorrFUNC,
                              considerValence = TRUE,
-                             datNodes = NULL) {
+                             datNodes = NULL,
+                             useSummarized = TRUE) {
 
   if(considerValence){
     ## update inputTable df by valence ratings
-    datNodes$text_summarized <-
-      str_remove(string = datNodes$text_summarized , pattern = "_positive$|_negative$|_neutral$|_ambivalent$")
+    if(useSummarized){
+      datNodes$text_summarized <-
+        str_remove(string = datNodes$text_summarized, pattern = "_positive$|_negative$|_neutral$|_ambivalent$")
+    } else{
+      datNodes$text <-
+        str_remove(string = datNodes$text, pattern = "_positive$|_negative$|_neutral$|_ambivalent$")  # Just to make sure
+    }
     datNodes$value <- ifelse(test = datNodes$value == 10, yes = 0, no = datNodes$value)
 
     for(r in 1:nrow(inputTable)){
@@ -181,8 +187,12 @@ correlationTable <- function(conList = duplicateDF,
 
       for(c in 1:ncol(inputTable)){
         if(inputTable[r,c] == 1){
-          tmp_value <- tmp_datNodes$value[tmp_datNodes$text_summarized %in% colnames(inputTable)[c]]
-
+          if(useSummarized){
+            tmp_value <- tmp_datNodes$value[tmp_datNodes$text_summarized %in% colnames(inputTable)[c]]
+          } else{
+            tmp_value <- tmp_datNodes$value[tmp_datNodes$text %in% colnames(inputTable)[c]]
+          }
+          
           if (mean(tmp_value) > 0){
             inputTable[r,c] <- "positive"
           }else if (mean(tmp_value) < 0){
