@@ -459,7 +459,8 @@ fluidPage(clusteringCAMs_overallLevelUI("clusteringCAMs_overallLevel"))
           ## CAM_nodes_raw
           path <- paste0("CAMs_drawn", ".rds")
           fs <- c(fs, path)
-          saveRDS(object = globals$drawnCAM, path)
+          CAMsGraphsList <- globals$drawnCAM()
+          saveRDS(object = CAMsGraphsList, path)
         }
 
 
